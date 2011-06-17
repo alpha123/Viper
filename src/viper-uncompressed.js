@@ -19,7 +19,7 @@ function Viper(options) {
     this.to = ({}).toString.call(options.to) == '[object Array]' ? options.to : [options.to];
     this.target = 0;
     this.parser = (function (val) {
-        var parsers = Viper.Parser, parser, list = [], i, l;
+        var parsers = Viper.Parsers, parser, list = [], i, l;
         for (i in parsers) {
             if (parsers.hasOwnProperty(i))
                 list.push(parsers[i]);
@@ -145,7 +145,7 @@ function compute(from, to, delta) {
     return (to - from) * delta + from;
 }
 
-Viper.Parser = {
+Viper.Parsers = {
     Number: function () {
         this.parse = function (x, noset) {
             x += '';
@@ -183,7 +183,7 @@ Viper.Parser = {
     }
 };
 
-Viper.Parser.Color.priority = 1;
+Viper.Parsers.Color.priority = 1;
 
 return Viper;
 
