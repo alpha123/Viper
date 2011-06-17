@@ -18,7 +18,7 @@ function Viper(options) {
     this.from = this._from = options.from || this.object[this.property];
     this.to = ({}).toString.call(options.to) == '[object Array]' ? options.to : [options.to];
     this.target = 0;
-    this.parser = (function (val) {
+    this.parser = options.parser || (function (val) {
         var parsers = Viper.Parsers, parser, list = [], i, l;
         for (i in parsers) {
             if (parsers.hasOwnProperty(i))
@@ -149,7 +149,7 @@ Viper.Parsers = {
     Number: function () {
         this.parse = function (x, noset) {
             x += '';
-            var match = /(\D*)(\d+)(.*)?/.exec(x), value = parseFloat(match[2]);
+            var match = /(\D*)(\d+)(.*)?/.exec(x) || [,,'x' - 2], value = parseFloat(match[2]);
             if (!noset) {
                 this.prefix = match[1] || '';
                 this.suffix = match[3] || '';
@@ -180,10 +180,25 @@ Viper.Parsers = {
                 colors.push(~~(compute(this.value[i], toArray[i], delta) + 0.5));
             return 'rgb(' + colors + ')';
         };
+    },
+    
+    // Adapted from the MooTools Fx.Text plugin by André Fiedler (http://mootools.net/forge/p/fx_text)
+    String: function () {
+        this.parse = function (x) {
+            return '' + x;
+        };
+        
+        this.compute = function (from, to, delta) {
+            from += '';
+            to += '';
+            var l = ~~(to.length * delta + 0.5);
+            return to.substr(0, l) + from.substr(l, from.length - l - ~~((from.length - to.length) * delta + 0.5));
+        };
     }
 };
 
 Viper.Parsers.Color.priority = 1;
+Viper.Parsers.String.priority = -9;
 
 return Viper;
 

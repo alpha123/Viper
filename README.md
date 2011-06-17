@@ -43,7 +43,7 @@ And here are all the methods:
 You can have a permanently looping animation by using the `to` property and the `finish` callback:
 
     Viper({
-        object: myDiv.style,
+        object: myElem.style,
         property: 'letterSpacing',
         from: '0px',
         to: ['10px', '0px'],
@@ -53,6 +53,15 @@ You can have a permanently looping animation by using the `to` property and the 
     }).start();
 
 Note about the `from` and `to` options:
-These can be either a color in rgb or hex format or a number or a string containing a number. The end value of the property being animated will *always* be a string, though it is not guaranteed things will stay that way.
+These can be either a color in rgb or hex format or a number or a string containing a number or a string not containing a number. The end value of the property being animated will *always* be a string, though it is not guaranteed things will stay that way.
 RGB colors can be specified any way you like, as long as they have three numbers separated by commas. You can do '0,0,0', 'rgb(255, 255, 255)', or if you want to be confusing, 'hsl(7, 141, 214)'. It is possible Viper will support hsl colors in the future though...
 Numbers can be wrapped between whatever strings you like, so for IE you can animate 'alpha(opacity=100)' to 'alpha(opacity=0)' and it'll work as expected. The parser's pretty flexible; the only thing it can't do is animate part of a string, so if you have `transform: rotate(30deg) scale(1.1)` you'll only be able to animate the `rotate` part. That will probably change in the future with a `parseAt` option, but for now... sorry.
+Strings can be animated, but if the string contains a number and you want to treat it as a string, you'll have to specify the semi-internal `parser` option manually. Something like:
+
+    Viper({
+        object: myElem,
+        property: myElem.innerText ? 'innerText' : 'textContent',
+        from: '5tr1ng w1th numb3r5 1n 1t!!!!1!!!!!111!!!',
+        to: '0th3r str1ng w1th numb3r5!!!!!!11!!1!!!!',
+        parser: Viper.Parsers.String // Otherwise it'll use the Number parser
+    }).start();
