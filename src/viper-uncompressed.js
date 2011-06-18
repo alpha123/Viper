@@ -49,7 +49,7 @@ function Viper(options) {
     assignEvents(this.finishHandlers, options.finish);
 }
 
-var VP = Viper.prototype, transition, i;
+var VP = Viper.prototype, transition, i, old = window.Viper;
 
 VP.start = function () {
     if (!this.running) {
@@ -199,6 +199,11 @@ Viper.Parsers = {
 
 Viper.Parsers.Color.priority = 1;
 Viper.Parsers.String.priority = -9;
+
+Viper.noConflict = function () {
+    window.Viper = old;
+    return Viper;
+};
 
 window.Viper = Viper;
 
