@@ -1,5 +1,5 @@
 // A good deal of code inspired by the awesome MooTools framework (http://mootools.net/)
-var Viper = (function (undefined) {
+(function (window, undefined) {
 
 function assignEvents(array, obj) {
     array.push.apply(array, obj ? ({}).toString.call(obj) == '[object Array]' ? obj : [obj] : []);
@@ -200,6 +200,6 @@ Viper.Parsers = {
 Viper.Parsers.Color.priority = 1;
 Viper.Parsers.String.priority = -9;
 
-return Viper;
+window.Viper = Viper;
 
-})();
+})(this);
